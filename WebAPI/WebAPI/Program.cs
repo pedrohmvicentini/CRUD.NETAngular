@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using WebAPI;
 using WebAPI.Data;
+using WebAPI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +22,9 @@ builder.Services.AddCors(options => options.AddPolicy(name: "AngularAppOrigins",
         .AllowAnyMethod()
         .AllowAnyHeader();
     }));
+
+//Dependency Injection
+builder.Services.AddScoped<IPersonService, PersonService>();
 
 var app = builder.Build();
 
