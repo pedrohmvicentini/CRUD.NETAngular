@@ -1,0 +1,14 @@
+<div *ngIf="person">
+  <h2>{{ person.firstName + ' ' + person.lastName }}</h2>
+  <div>
+    First name:
+    <input [(ngModel)]="person.firstName" placeholder="First name" />
+  </div>
+  <div>
+    Last name:
+    <input [(ngModel)]="person.lastName" placeholder="Last name" />
+  </div>
+  <button (click)="updatePerson(person)" *ngIf="person.id">Save</button>
+  <button (click)="deletePerson(person)" *ngIf="person.id">Delete</button>
+  <button (click)="createPerson(person)" *ngIf="!person.id">Create</button>
+</div>

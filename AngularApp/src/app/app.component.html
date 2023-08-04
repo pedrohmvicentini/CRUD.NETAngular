@@ -1,0 +1,18 @@
+<button (click)="initNewContact()">Create New Contact</button>
+
+<table>
+  <thead>
+    <th>Name</th>
+    <th>Contact</th>
+    <th></th>
+  </thead>
+  <tbody>
+    <tr *ngFor="let person of people">
+      <td>{{person.firstName + ' ' + person.lastName }}</td>
+      <td></td>
+      <td><button (click)="editContact(person)">Edit</button></td>
+    </tr>
+  </tbody>
+</table>
+
+<app-edit-person [person]="personToEdit"></app-edit-person>
