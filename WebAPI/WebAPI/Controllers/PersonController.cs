@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using WebAPI.Services;
+using WebAPI.Interfaces;
 
 namespace WebAPI.Controllers
 {
@@ -17,7 +17,13 @@ namespace WebAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<List<Person>>> GetPeople()
         {
-            return Ok(await _personService.GetPeople());
+            return Ok(await _personService.GetAll());
+        }
+
+        [HttpGet("/{id}")]
+        public async Task<ActionResult<Person>> Detail(int id)
+        {
+            return Ok(await _personService.GetByIdAsync(id));
         }
 
         [HttpPost]

@@ -1,16 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using WebAPI.Data;
+using WebAPI.Interfaces;
 
 namespace WebAPI.Services
 {
-    public interface IPersonService
-    {
-        Task<List<Person>> GetPeople();
-        Task<List<Person>> CreatePerson(Person person);
-        Task<List<Person>> UpdatePerson(Person person);
-        Task<List<Person>> DeletePerson(int id);
-    }
     public class PersonService : IPersonService
     {
         private readonly DataContext _context;
@@ -20,9 +13,14 @@ namespace WebAPI.Services
             _context = context;
         }
 
-        public async Task<List<Person>> GetPeople()
+        public async Task<List<Person>> GetAll()
         {
             return await _context.Person.ToListAsync();
+        }
+
+        public async Task<Person> GetByIdAsync(int id)
+        {
+            return await _context.Person.FirstOrDefaultAsync(n => n.Id == id);
         }
 
         public async Task<List<Person>> CreatePerson(Person person)
