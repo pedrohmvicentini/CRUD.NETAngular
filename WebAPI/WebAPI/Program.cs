@@ -26,6 +26,7 @@ builder.Services.AddCors(options => options.AddPolicy(name: "AngularAppOrigins",
 
 //Dependency Injection
 builder.Services.AddScoped<IPersonService, PersonService>();
+builder.Services.AddScoped<IContactService, ContactService>();
 
 var app = builder.Build();
 

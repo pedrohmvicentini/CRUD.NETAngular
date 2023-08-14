@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WebAPI.Data;
 using WebAPI.Interfaces;
+using WebAPI.Model;
 
 namespace WebAPI.Services
 {
@@ -15,20 +16,33 @@ namespace WebAPI.Services
 
         public async Task<List<Person>> GetAll()
         {
-            return await _context.Person.ToListAsync();
+            return await _context.Person.Include(c => c.Contacts).ToListAsync();
         }
 
         public async Task<Person> GetByIdAsync(int id)
         {
-            return await _context.Person.FirstOrDefaultAsync(n => n.Id == id);
+            return await _context.Person.Include(c => c.Contacts).FirstOrDefaultAsync(n => n.Id == id);
         }
 
         public async Task<List<Person>> CreatePerson(Person person)
         {
-            _context.Person.Add(person);
-            await _context.SaveChangesAsync();
+            using (var transaction = _context.Database.BeginTransaction())
+            {
+                try
+                {
+                    _context.Person.Add(person);
 
-            return await _context.Person.ToListAsync();
+                    await _context.SaveChangesAsync();
+
+                    transaction.Commit();
+                }
+                catch
+                {
+                    transaction.Rollback();
+                }
+            }
+
+            return await _context.Person.Include(c => c.Contacts).ToListAsync();
         }
 
         public async Task<List<Person>> UpdatePerson(Person person)

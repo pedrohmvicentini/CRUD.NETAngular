@@ -1,9 +1,9 @@
-﻿namespace WebAPI
+﻿namespace WebAPI.Model
 {
-    public class Person
+    public class Person : ModelBase
     {
-        public int Id { get; set; }
         public string? FirstName { get; set; } = string.Empty;
         public string? LastName { get; set; } = string.Empty;
+        public List<Contact> Contacts { get; set; } = new List<Contact>();
     }
 }

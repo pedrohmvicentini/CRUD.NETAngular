@@ -1,4 +1,6 @@
-﻿namespace WebAPI.Interfaces
+﻿using WebAPI.Model;
+
+namespace WebAPI.Interfaces
 {
     public interface IPersonService
     {

@@ -2,9 +2,9 @@
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using WebAPI;
 using WebAPI.Controllers;
 using WebAPI.Interfaces;
+using WebAPI.Model;
 
 namespace UnitTest
 {
@@ -12,7 +12,6 @@ namespace UnitTest
     {
         //Services/Repositories
         private readonly IPersonService _iPersonService;
-        private readonly HttpContextAccessor _httpContextAccessor;
 
         //Controllers
         private readonly PersonController _iPersonController;
@@ -21,7 +20,6 @@ namespace UnitTest
         {
             //Dependencies
             _iPersonService = A.Fake<IPersonService>(); //with FakeItEasy tool
-            _httpContextAccessor = A.Fake<HttpContextAccessor>();
 
             //SUT
             _iPersonController = new PersonController(_iPersonService);
@@ -66,6 +64,41 @@ namespace UnitTest
         //    list.Should().NotBeNull();
         //}
 
+        [Fact]
+        public void CreatePerson()
+        {
+            //Arrange
+            var person = A.Fake<Person>(x => x.WithArgumentsForConstructor(() => new Person()));
+
+            person.FirstName = "Jackie";
+            person.LastName = "Chan";
+            person.CreatedDate = DateTime.Now;
+            person.Contacts = new List<Contact>()
+                {
+                    new Contact
+                    {
+                        IdPerson = 6,
+                        Type = 2,
+                        Text = "123456789",
+                        CreatedDate = DateTime.Now
+                    },
+                    new Contact
+                    {
+                        IdPerson = 6,
+                        Type = 3,
+                        Text = "jackiechan@gmail.com",
+                        CreatedDate = DateTime.Now
+                    }
+                };
+
+            A.CallTo(() => _iPersonService.CreatePerson(person));
+
+            A.CallTo(() => _iPersonService.GetByIdAsync(person.Id)).Returns(person);
+            var result = _iPersonController.Detail(person.Id);
+
+            //assert
+            result.Should().BeOfType<Task<ActionResult<Person>>>();
+        }
 
     }
 }
